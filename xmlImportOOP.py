@@ -133,29 +133,43 @@ def xmlAutomataImport (filename):
 		#transitionNumber = 0
 		last_sourceID = -1		
 		for transition in data.findall('transition'):
+			listIndex = -1
+			sourceID = int(transition.get('source'))
+			targetID = int(transition.get('target'))
+			eventID = int(transition.get('event'))
 
-		 	sourceID = int(transition.get('source'))
-		 	targetID = int(transition.get('target'))
-		 	eventID = int(transition.get('event'))
+			if sourceID != last_sourceID:		 			 		
+				last_sourceID = sourceID
+				counterIndex = 0
+				for stateInfo in temporaryList[0]:
+					if stateInfo[0] == sourceID:
+						sourceLabel = stateInfo[1]
+						# print(sourceLabel)
+						# print('encontrou!') 	
+						break
+				for sublist in automata_information[3]:		 			
+					if sourceLabel == sublist[0][0][0]:
+						listIndex = automata_information[3].index(sublist)
+						break
+					counterIndex += 1
+				if listIndex == -1:		
+					#Creating a new sublist in transitions list
+					automata_information[3].append([])
+					listIndex = counterIndex
 
-		 	if sourceID != last_sourceID:		 		
-		 		last_sourceID = sourceID		 		
-		 		#Creating a new sublist in transitions list
-		 		automata_information[3].append([])
+			for stateInfo in temporaryList[0]:
+				if stateInfo[0] == sourceID:
+					automata_information[3][listIndex].append([[stateInfo[1]]])	 	
+					break
 
-		 	for stateInfo in temporaryList[0]:
-		 		if stateInfo[0] == sourceID:
-	 				automata_information[3][-1].append([[stateInfo[1]]])	 	
-	 				break
+			for eventInfo in temporaryList[1]:
+				if eventInfo[0] == eventID:
+					automata_information[3][listIndex][-1].append(eventInfo[1])	 	
+					break
 
-	 		for eventInfo in temporaryList[1]:
-		 		if eventInfo[0] == eventID:
-	 				automata_information[3][-1][-1].append(eventInfo[1])	 	
-	 				break
-
-	 		for stateInfo in temporaryList[0]:
-		 		if stateInfo[0] == targetID:
-	 				automata_information[3][-1][-1].append([stateInfo[1]])	 	
-	 				break	 		
+			for stateInfo in temporaryList[0]:
+				if stateInfo[0] == targetID:
+					automata_information[3][listIndex][-1].append([stateInfo[1]])	 	
+					break
 
 	return automata_information 
