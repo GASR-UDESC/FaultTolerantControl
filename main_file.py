@@ -10,8 +10,8 @@ from elementClasses import automata, state, event
 
 automata1_information = xmlAutomataImport('supervisor.xmd')
 
-# for x in automata1_information:
-# 	print(x)
+for x in automata1_information:
+	print(x,"\n\nLINHA\n\n")
 
 ###############################################
 #Distributing Automata 1 information in classes
@@ -87,10 +87,10 @@ A1 = automata(automataLabel, list_of_states, list_of_events, 'NaN')
 print('-'*25)
 for x in A1.set_of_states:
 	print(globals()[x].label)
-print('-'*25)
+print('-=0=-'*15)
 for x in A1.set_of_events:
 	print(globals()[x].label)
-print('-'*25)
+print('-=0=-'*15)
 
 ###############################################
 ###############################################

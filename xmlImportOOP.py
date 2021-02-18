@@ -19,6 +19,7 @@ automata_information =
 '''
 
 from copy import deepcopy as dcp, copy as cp
+from elementClasses import automata,event,state
 import xml.etree.ElementTree as ET
 import re
 
@@ -159,3 +160,30 @@ def xmlAutomataImport (filename):
 	 				break	 		
 
 	return automata_information 
+
+
+def build_automata(automata_information):
+	for x in automata1_information:
+		print(x,"\n\nLINHA\n\n")
+
+	###############################################
+	#Distributing Automata 1 information in classes
+
+	#Declaring supporting variables
+	list_of_states = []
+	list_of_events = []
+	stateID_model = 'A1_S'	#class ID representation A1S0 (Automata 1 State 0)...
+	eventID_model = 'A1_E'	#class ID representation A1S0 (Automata 1 State 0)...
+
+	#Extracting information of the states [[LABEL], MARKING, INITIAL]
+	counterID = 0
+	for state_info in automata1_information[1]:
+		stateID = stateID_model + str(counterID)	 
+		list_of_states.append(stateID)				
+		stateLabel = state_info[0]
+		stateMarking = state_info[1]
+		stateInitial = state_info[2]
+		outputTransition = []
+		for transition_info in automata1_information[3][counterID]:
+			outputTransition.append([transition_info[2], transition_info[1]])
+		counterID += 1
