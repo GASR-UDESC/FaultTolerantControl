@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
 Code for Python 3
 Author: Herbert Leitão
@@ -46,14 +47,13 @@ def genElements(automataID, xmdFile):
 			#print('Update => ' + str(transition_info[2]) + str(transition_info[1]))
 		counterID += 1
 
-		# print('stateID = ' + str(stateID))
-		# print('stateMarking = ' + str(stateMarking))
-		# print('stateInitial = ' + str(stateInitial))
-		# print('outputTransition = ' + str(outputTransition))
+		print('stateID = ' + str(stateID))
+		print('stateMarking = ' + str(stateMarking))
+		print('stateInitial = ' + str(stateInitial))
+		print('outputTransition = ' + str(outputTransition))
 
 		#Generating the state class
-		globals()[stateID] = state(stateLabel, stateMarking, stateInitial, 
-			output_transitions = outputTransition, input_transitions = [])
+		globals()[stateID] = state(stateLabel, stateMarking, stateInitial,output_transitions = outputTransition, input_transitions = [])
 		list_of_results[3].append(globals()[stateID])
 
 	list_of_results[2] = list_of_states

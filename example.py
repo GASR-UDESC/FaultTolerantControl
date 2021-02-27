@@ -13,9 +13,9 @@ automata_information = xmlAutomataImport('valve_a_fault.xmd')
 # for x in automata_information[3]:
 #     print(x)
 
-classS1 = genElements('S1', 'supervisor_a.xmd')
+classS1 = genElements('SU1', 'vaf_supervisor_a.xmd')
 
-classF1 = genElements('F1', 'valve_a_fault.xmd')
+classF1 = genElements('NY1', 'ny_vaf.xmd')
 
 # print('-'*25)
 # print('TEST valve_a_fault')
@@ -29,7 +29,9 @@ classF1 = genElements('F1', 'valve_a_fault.xmd')
 #     print(x.label)
 # print('-'*25)
 
-classF1S1 = operation.syncFault('F1S1', classS1, classF1)
+classF1S1 = operation.syncNF('F1S1', classS1, classF1)
+
+
 
 for x in classF1S1:
     print('-'*25)
