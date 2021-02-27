@@ -1,0 +1,595 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model version="2.1" type="FSA" id="vaf_supervisor_a">
+<data>
+	<state id="0">
+		<properties>
+			<initial />
+			<marked />
+		</properties>
+		<name>((P1,VA1,VC1,VD1),1,VA1)</name>
+	</state>
+	<state id="1">
+		<properties/>
+		<name>((P1,VA2,VC1,VD1),4,VA2)</name>
+	</state>
+	<state id="2">
+		<properties/>
+		<name>((P1,VA2,VC1,VD1),4,VAF2)</name>
+	</state>
+	<state id="3">
+		<properties/>
+		<name>((P1,VA2,VC1,VD1),9,VA2)</name>
+	</state>
+	<state id="4">
+		<properties/>
+		<name>((P1,VA2,VC1,VD1),9,VAF2)</name>
+	</state>
+	<state id="5">
+		<properties>
+			<marked />
+		</properties>
+		<name>((P1,VA1,VC1,VD1),19,VA1)</name>
+	</state>
+	<state id="6">
+		<properties>
+			<marked />
+		</properties>
+		<name>((P1,VA1,VC1,VD1),19,VAF1)</name>
+	</state>
+	<state id="7">
+		<properties/>
+		<name>((P1,VA1,VC2,VD1),4,VA1)</name>
+	</state>
+	<state id="8">
+		<properties/>
+		<name>((P1,VA1,VC2,VD1),4,VAF1)</name>
+	</state>
+	<state id="9">
+		<properties/>
+		<name>((P1,VA1,VC2,VD1),13,VA1)</name>
+	</state>
+	<state id="10">
+		<properties/>
+		<name>((P1,VA1,VC2,VD1),13,VAF1)</name>
+	</state>
+	<state id="11">
+		<properties>
+			<marked />
+		</properties>
+		<name>((P1,VA1,VC1,VD1),29,VA1)</name>
+	</state>
+	<state id="12">
+		<properties>
+			<marked />
+		</properties>
+		<name>((P1,VA1,VC1,VD1),29,VAF1)</name>
+	</state>
+	<state id="13">
+		<properties/>
+		<name>((P1,VA1,VC1,VD2),55,VA1)</name>
+	</state>
+	<state id="14">
+		<properties/>
+		<name>((P1,VA1,VC1,VD2),55,VAF1)</name>
+	</state>
+	<state id="15">
+		<properties/>
+		<name>((P2,VA1,VC1,VD2),4,VA1)</name>
+	</state>
+	<state id="16">
+		<properties/>
+		<name>((P2,VA1,VC1,VD2),4,VAF1)</name>
+	</state>
+	<state id="17">
+		<properties/>
+		<name>((P2,VA1,VC1,VD2),10,VA1)</name>
+	</state>
+	<state id="18">
+		<properties/>
+		<name>((P2,VA1,VC1,VD2),10,VAF1)</name>
+	</state>
+	<state id="19">
+		<properties/>
+		<name>((P1,VA1,VC1,VD2),25,VA1)</name>
+	</state>
+	<state id="20">
+		<properties/>
+		<name>((P1,VA1,VC1,VD2),25,VAF1)</name>
+	</state>
+	<state id="21">
+		<properties>
+			<marked />
+		</properties>
+		<name>((P1,VA1,VC1,VD1),1,VAF1)</name>
+	</state>
+	<event id="1">
+		<properties>
+			<observable />
+		</properties>
+		<name>SW_on</name>
+	</event>
+	<event id="2">
+		<properties>
+			<observable />
+		</properties>
+		<name>Timer_9s</name>
+	</event>
+	<event id="3">
+		<properties>
+			<observable />
+		</properties>
+		<name>Inf_Sup_lt5</name>
+	</event>
+	<event id="4">
+		<properties>
+			<controllable />
+			<observable />
+		</properties>
+		<name>P_stop</name>
+	</event>
+	<event id="5">
+		<properties>
+			<controllable />
+			<observable />
+		</properties>
+		<name>VC_open</name>
+	</event>
+	<event id="6">
+		<properties />
+		<name>VA_leak</name>
+	</event>
+	<event id="7">
+		<properties>
+			<controllable />
+			<observable />
+		</properties>
+		<name>VD_close</name>
+	</event>
+	<event id="8">
+		<properties>
+			<controllable />
+			<observable />
+		</properties>
+		<name>P_start</name>
+	</event>
+	<event id="9">
+		<properties>
+			<controllable />
+			<observable />
+		</properties>
+		<name>VD_open</name>
+	</event>
+	<event id="10">
+		<properties>
+			<observable />
+		</properties>
+		<name>SW_off</name>
+	</event>
+	<event id="11">
+		<properties>
+			<controllable />
+			<observable />
+		</properties>
+		<name>VC_close</name>
+	</event>
+	<event id="12">
+		<properties>
+			<controllable />
+			<observable />
+		</properties>
+		<name>VA_open</name>
+	</event>
+	<event id="13">
+		<properties>
+			<observable />
+		</properties>
+		<name>Sup_Inf</name>
+	</event>
+	<event id="14">
+		<properties>
+			<observable />
+		</properties>
+		<name>Inf_Sup_ge5</name>
+	</event>
+	<event id="15">
+		<properties>
+			<controllable />
+			<observable />
+		</properties>
+		<name>VA_close</name>
+	</event>
+	<transition id="1" source="0" target="1" event="12">
+	</transition>
+	<transition id="2" source="1" target="2" event="6">
+	</transition>
+	<transition id="3" source="1" target="3" event="2">
+	</transition>
+	<transition id="4" source="2" target="4" event="2">
+	</transition>
+	<transition id="5" source="3" target="4" event="6">
+	</transition>
+	<transition id="6" source="3" target="5" event="15">
+	</transition>
+	<transition id="7" source="3" target="3" event="2">
+	</transition>
+	<transition id="8" source="4" target="6" event="15">
+	</transition>
+	<transition id="9" source="4" target="4" event="2">
+	</transition>
+	<transition id="10" source="5" target="7" event="5">
+	</transition>
+	<transition id="11" source="6" target="8" event="5">
+	</transition>
+	<transition id="12" source="7" target="9" event="3">
+	</transition>
+	<transition id="13" source="7" target="9" event="14">
+	</transition>
+	<transition id="14" source="8" target="10" event="3">
+	</transition>
+	<transition id="15" source="8" target="10" event="14">
+	</transition>
+	<transition id="16" source="9" target="11" event="11">
+	</transition>
+	<transition id="17" source="9" target="9" event="3">
+	</transition>
+	<transition id="18" source="9" target="9" event="14">
+	</transition>
+	<transition id="19" source="10" target="12" event="11">
+	</transition>
+	<transition id="20" source="10" target="10" event="3">
+	</transition>
+	<transition id="21" source="10" target="10" event="14">
+	</transition>
+	<transition id="22" source="11" target="13" event="9">
+	</transition>
+	<transition id="23" source="12" target="14" event="9">
+	</transition>
+	<transition id="24" source="13" target="13" event="1">
+	</transition>
+	<transition id="25" source="13" target="13" event="10">
+	</transition>
+	<transition id="26" source="13" target="15" event="8">
+	</transition>
+	<transition id="27" source="14" target="14" event="1">
+	</transition>
+	<transition id="28" source="14" target="14" event="10">
+	</transition>
+	<transition id="29" source="14" target="16" event="8">
+	</transition>
+	<transition id="30" source="15" target="15" event="1">
+	</transition>
+	<transition id="31" source="15" target="15" event="10">
+	</transition>
+	<transition id="32" source="15" target="17" event="13">
+	</transition>
+	<transition id="33" source="16" target="16" event="1">
+	</transition>
+	<transition id="34" source="16" target="16" event="10">
+	</transition>
+	<transition id="35" source="16" target="18" event="13">
+	</transition>
+	<transition id="36" source="17" target="17" event="1">
+	</transition>
+	<transition id="37" source="17" target="17" event="10">
+	</transition>
+	<transition id="38" source="17" target="19" event="4">
+	</transition>
+	<transition id="39" source="17" target="17" event="13">
+	</transition>
+	<transition id="40" source="18" target="18" event="1">
+	</transition>
+	<transition id="41" source="18" target="18" event="10">
+	</transition>
+	<transition id="42" source="18" target="20" event="4">
+	</transition>
+	<transition id="43" source="18" target="18" event="13">
+	</transition>
+	<transition id="44" source="19" target="19" event="1">
+	</transition>
+	<transition id="45" source="19" target="19" event="10">
+	</transition>
+	<transition id="46" source="19" target="0" event="7">
+	</transition>
+	<transition id="47" source="20" target="20" event="1">
+	</transition>
+	<transition id="48" source="20" target="20" event="10">
+	</transition>
+	<transition id="49" source="20" target="21" event="7">
+	</transition>
+	<transition id="50" source="21" target="2" event="12">
+	</transition>
+</data>
+<meta tag="annotation" version="3">sync(supervisor_a,valve_a_fault): Composed automaton</meta>
+<meta tag="layout" version="2.1">
+	<font size="12.0"/>
+	<layout uniformnodes="false"/>
+	<state id="0">
+		<circle r="81.5" x="126.0" y="844.0" />
+		<arrow x="86.169525" y="-49.75" />
+	</state>
+	<state id="1">
+		<circle r="81.5" x="269.0" y="473.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<state id="2">
+		<circle r="85.0" x="530.0" y="465.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<state id="3">
+		<circle r="81.5" x="549.0" y="830.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<state id="4">
+		<circle r="85.0" x="856.0" y="471.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<state id="5">
+		<circle r="85.0" x="753.0" y="1092.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<state id="6">
+		<circle r="88.5" x="1032.0" y="225.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<state id="7">
+		<circle r="81.5" x="1043.0" y="1079.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<state id="8">
+		<circle r="85.0" x="1348.0" y="228.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<state id="9">
+		<circle r="85.0" x="1321.0" y="1046.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<state id="10">
+		<circle r="88.5" x="1785.0" y="261.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<state id="11">
+		<circle r="85.0" x="1503.0" y="1308.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<state id="12">
+		<circle r="88.5" x="1726.0" y="660.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<state id="13">
+		<circle r="85.0" x="1193.0" y="1336.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<state id="14">
+		<circle r="88.5" x="1450.0" y="457.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<state id="15">
+		<circle r="81.5" x="924.0" y="1468.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<state id="16">
+		<circle r="85.0" x="1415.0" y="773.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<state id="17">
+		<circle r="85.0" x="639.0" y="1363.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<state id="18">
+		<circle r="88.5" x="1224.0" y="524.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<state id="19">
+		<circle r="85.0" x="375.0" y="1110.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<state id="20">
+		<circle r="88.5" x="1068.0" y="860.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<state id="21">
+		<circle r="85.0" x="746.0" y="847.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<transition id="1">
+		<bezier x1="126.0" y1="844.0" x2="269.0" y2="473.0" ctrlx1="173.66665649414062" ctrly1="720.3333129882812" ctrlx2="221.33334350585938" ctrly2="596.6666870117188" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="2">
+		<bezier x1="269.0" y1="473.0" x2="530.0" y2="465.0" ctrlx1="356.0" ctrly1="470.3333435058594" ctrlx2="443.0" ctrly2="467.6666564941406" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="3">
+		<bezier x1="269.0" y1="473.0" x2="549.0" y2="830.0" ctrlx1="362.33331298828125" ctrly1="592.0" ctrlx2="455.66668701171875" ctrly2="711.0" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="4">
+		<bezier x1="530.0" y1="465.0" x2="856.0" y2="471.0" ctrlx1="638.6666870117188" ctrly1="467.0" ctrlx2="747.3333129882812" ctrly2="469.0" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="5">
+		<bezier x1="549.0" y1="830.0" x2="856.0" y2="471.0" ctrlx1="651.3333129882812" ctrly1="710.3333129882812" ctrlx2="753.6666870117188" ctrly2="590.6666870117188" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="6">
+		<bezier x1="549.0" y1="830.0" x2="753.0" y2="1092.0" ctrlx1="617.0" ctrly1="917.3333129882812" ctrlx2="685.0" ctrly2="1004.6666870117188" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="7">
+		<bezier x1="549.0" y1="830.0" x2="549.0" y2="830.0" ctrlx1="318.48321533203125" ctrly1="599.4832153320312" ctrlx2="779.5167846679688" ctrly2="599.4832153320312" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="8">
+		<bezier x1="856.0" y1="471.0" x2="1032.0" y2="225.0" ctrlx1="914.6666870117188" ctrly1="389.0" ctrlx2="973.3333129882812" ctrly2="307.0" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="9">
+		<bezier x1="856.0" y1="471.0" x2="856.0" y2="471.0" ctrlx1="615.583740234375" ctrly1="230.58377075195312" ctrlx2="1096.416259765625" ctrly2="230.58377075195312" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="10">
+		<bezier x1="753.0" y1="1092.0" x2="1043.0" y2="1079.0" ctrlx1="849.6666870117188" ctrly1="1087.6666259765625" ctrlx2="946.3333129882812" ctrly2="1083.3333740234375" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="11">
+		<bezier x1="1032.0" y1="225.0" x2="1348.0" y2="228.0" ctrlx1="1137.3333740234375" ctrly1="226.0" ctrlx2="1242.6666259765625" ctrly2="227.0" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="12" group="10">
+		<bezier x1="1043.0" y1="1079.0" x2="1321.0" y2="1046.0" ctrlx1="1135.6666259765625" ctrly1="1068.0" ctrlx2="1228.3333740234375" ctrly2="1057.0" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="13" group="10">
+		<bezier x1="1043.0" y1="1079.0" x2="1321.0" y2="1046.0" ctrlx1="1135.6666259765625" ctrly1="1068.0" ctrlx2="1228.3333740234375" ctrly2="1057.0" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="14" group="11">
+		<bezier x1="1348.0" y1="228.0" x2="1785.0" y2="261.0" ctrlx1="1493.6666259765625" ctrly1="239.0" ctrlx2="1639.3333740234375" ctrly2="250.0" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="15" group="11">
+		<bezier x1="1348.0" y1="228.0" x2="1785.0" y2="261.0" ctrlx1="1493.6666259765625" ctrly1="239.0" ctrlx2="1639.3333740234375" ctrly2="250.0" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="16">
+		<bezier x1="1321.0" y1="1046.0" x2="1503.0" y2="1308.0" ctrlx1="1381.6666259765625" ctrly1="1133.3333740234375" ctrlx2="1442.3333740234375" ctrly2="1220.6666259765625" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="17" group="9">
+		<bezier x1="1321.0" y1="1046.0" x2="1321.0" y2="1046.0" ctrlx1="1116.48046875" ctrly1="1317.6094970703125" ctrlx2="1049.3905029296875" ctrly2="841.4804077148438" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="18" group="9">
+		<bezier x1="1321.0" y1="1046.0" x2="1321.0" y2="1046.0" ctrlx1="1116.48046875" ctrly1="1317.6094970703125" ctrlx2="1049.3905029296875" ctrly2="841.4804077148438" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="19">
+		<bezier x1="1785.0" y1="261.0" x2="1726.0" y2="660.0" ctrlx1="1765.3333740234375" ctrly1="394.0" ctrlx2="1745.6666259765625" ctrly2="527.0" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="20" group="7">
+		<bezier x1="1785.0" y1="261.0" x2="1785.0" y2="261.0" ctrlx1="1534.6842041015625" ctrly1="10.6842041015625" ctrlx2="2035.3157958984375" ctrly2="10.684249877929688" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="21" group="7">
+		<bezier x1="1785.0" y1="261.0" x2="1785.0" y2="261.0" ctrlx1="1534.6842041015625" ctrly1="10.6842041015625" ctrlx2="2035.3157958984375" ctrly2="10.684249877929688" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="22">
+		<bezier x1="1503.0" y1="1308.0" x2="1193.0" y2="1336.0" ctrlx1="1399.6666259765625" ctrly1="1317.3333740234375" ctrlx2="1296.3333740234375" ctrly2="1326.6666259765625" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="23">
+		<bezier x1="1726.0" y1="660.0" x2="1450.0" y2="457.0" ctrlx1="1634.0" ctrly1="592.3333129882812" ctrlx2="1542.0" ctrly2="524.6666870117188" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="24" group="4">
+		<bezier x1="1193.0" y1="1336.0" x2="1193.0" y2="1336.0" ctrlx1="952.5838012695312" ctrly1="1095.583740234375" ctrlx2="1433.416259765625" ctrly2="1095.583740234375" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="25" group="4">
+		<bezier x1="1193.0" y1="1336.0" x2="1193.0" y2="1336.0" ctrlx1="952.5838012695312" ctrly1="1095.583740234375" ctrlx2="1433.416259765625" ctrly2="1095.583740234375" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="26">
+		<bezier x1="1193.0" y1="1336.0" x2="924.0" y2="1468.0" ctrlx1="1103.3333740234375" ctrly1="1380.0" ctrlx2="1013.6666870117188" ctrly2="1424.0" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="27" group="5">
+		<bezier x1="1450.0" y1="457.0" x2="1450.0" y2="457.0" ctrlx1="1199.6842041015625" ctrly1="206.68418884277344" ctrlx2="1700.3157958984375" ctrly2="206.68418884277344" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="28" group="5">
+		<bezier x1="1450.0" y1="457.0" x2="1450.0" y2="457.0" ctrlx1="1199.6842041015625" ctrly1="206.68418884277344" ctrlx2="1700.3157958984375" ctrly2="206.68418884277344" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="29">
+		<bezier x1="1450.0" y1="457.0" x2="1415.0" y2="773.0" ctrlx1="1438.3333740234375" ctrly1="562.3333129882812" ctrlx2="1426.6666259765625" ctrly2="667.6666870117188" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="30" group="8">
+		<bezier x1="924.0" y1="1468.0" x2="924.0" y2="1468.0" ctrlx1="693.4832153320312" ctrly1="1237.4832763671875" ctrlx2="1154.5167236328125" ctrly2="1237.4832763671875" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="31" group="8">
+		<bezier x1="924.0" y1="1468.0" x2="924.0" y2="1468.0" ctrlx1="693.4832153320312" ctrly1="1237.4832763671875" ctrlx2="1154.5167236328125" ctrly2="1237.4832763671875" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="32">
+		<bezier x1="924.0" y1="1468.0" x2="639.0" y2="1363.0" ctrlx1="829.0" ctrly1="1433.0" ctrlx2="734.0" ctrly2="1398.0" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="33" group="3">
+		<bezier x1="1415.0" y1="773.0" x2="1415.0" y2="773.0" ctrlx1="1174.583740234375" ctrly1="532.583740234375" ctrlx2="1655.416259765625" ctrly2="532.583740234375" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="34" group="3">
+		<bezier x1="1415.0" y1="773.0" x2="1415.0" y2="773.0" ctrlx1="1174.583740234375" ctrly1="532.583740234375" ctrlx2="1655.416259765625" ctrly2="532.583740234375" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="35">
+		<bezier x1="1415.0" y1="773.0" x2="1224.0" y2="524.0" ctrlx1="1351.3333740234375" ctrly1="690.0" ctrlx2="1287.6666259765625" ctrly2="607.0" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="36" group="2">
+		<bezier x1="639.0" y1="1363.0" x2="639.0" y2="1363.0" ctrlx1="398.583740234375" ctrly1="1122.583740234375" ctrlx2="879.416259765625" ctrly2="1122.583740234375" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="37" group="2">
+		<bezier x1="639.0" y1="1363.0" x2="639.0" y2="1363.0" ctrlx1="398.583740234375" ctrly1="1122.583740234375" ctrlx2="879.416259765625" ctrly2="1122.583740234375" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="38">
+		<bezier x1="639.0" y1="1363.0" x2="375.0" y2="1110.0" ctrlx1="551.0" ctrly1="1278.6666259765625" ctrlx2="463.0" ctrly2="1194.3333740234375" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="39" group="2">
+		<bezier x1="639.0" y1="1363.0" x2="639.0" y2="1363.0" ctrlx1="398.583740234375" ctrly1="1122.583740234375" ctrlx2="879.416259765625" ctrly2="1122.583740234375" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="40" group="6">
+		<bezier x1="1224.0" y1="524.0" x2="1224.0" y2="524.0" ctrlx1="965.2163696289062" ctrly1="765.55126953125" ctrlx2="982.44873046875" ctrly2="265.21636962890625" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="41" group="6">
+		<bezier x1="1224.0" y1="524.0" x2="1224.0" y2="524.0" ctrlx1="965.2163696289062" ctrly1="765.55126953125" ctrlx2="982.44873046875" ctrly2="265.21636962890625" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="42">
+		<bezier x1="1224.0" y1="524.0" x2="1068.0" y2="860.0" ctrlx1="1172.0" ctrly1="636.0" ctrlx2="1120.0" ctrly2="748.0" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="43" group="6">
+		<bezier x1="1224.0" y1="524.0" x2="1224.0" y2="524.0" ctrlx1="965.2163696289062" ctrly1="765.55126953125" ctrlx2="982.44873046875" ctrly2="265.21636962890625" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="44" group="12">
+		<bezier x1="375.0" y1="1110.0" x2="375.0" y2="1110.0" ctrlx1="134.5836639404297" ctrly1="869.583740234375" ctrlx2="615.416259765625" ctrly2="869.5836791992188" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="45" group="12">
+		<bezier x1="375.0" y1="1110.0" x2="375.0" y2="1110.0" ctrlx1="134.5836639404297" ctrly1="869.583740234375" ctrlx2="615.416259765625" ctrly2="869.5836791992188" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="46">
+		<bezier x1="375.0" y1="1110.0" x2="126.0" y2="844.0" ctrlx1="292.0" ctrly1="1021.3333129882812" ctrlx2="209.0" ctrly2="932.6666870117188" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="47" group="1">
+		<bezier x1="1068.0" y1="860.0" x2="1068.0" y2="860.0" ctrlx1="1209.1983642578125" ctrly1="535.378662109375" ctrlx2="1392.621337890625" ctrly2="1001.1983642578125" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="48" group="1">
+		<bezier x1="1068.0" y1="860.0" x2="1068.0" y2="860.0" ctrlx1="1209.1983642578125" ctrly1="535.378662109375" ctrlx2="1392.621337890625" ctrly2="1001.1983642578125" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="49">
+		<bezier x1="1068.0" y1="860.0" x2="746.0" y2="847.0" ctrlx1="960.6666259765625" ctrly1="855.6666870117188" ctrlx2="853.3333740234375" ctrly2="851.3333129882812" />
+		<label x="5.0" y="5.0" />
+	</transition>
+	<transition id="50">
+		<bezier x1="746.0" y1="847.0" x2="530.0" y2="465.0" ctrlx1="674.0" ctrly1="719.6666870117188" ctrlx2="602.0" ctrly2="592.3333129882812" />
+		<label x="5.0" y="5.0" />
+	</transition>
+</meta>
+</model>
