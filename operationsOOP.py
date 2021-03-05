@@ -2,8 +2,9 @@
 '''
 Code for Python 3
 Author: Herbert Leitão
-Date Version: 17/02/2021
+Date Version: 05/03/2021
 Comments: DES operations in OOP
+Comments: Updating synchronous composition operation with NF automata
 '''
 
 from elementClasses import automata, state, event
@@ -29,82 +30,65 @@ def intersection(lst1, lst2):
 	lst3 = [value for value in lst1 if value in lst2] 
 	return lst3 
 
-def syncNF(automataID,SU,NF):
+def syncNF(automataID,FSA,NFA): # FSA = Automata (Fault + Supervisor)
+								# NFA = Automata (NF Labeller)
 	list_of_results = [automataID,'NaN',[],[],[],[]]	#[automataID, automata class, [states ID], ...
 												# ...[classes of states], [events ID], [classes of events]
 	##Reading Test
 	##########################################################
 	print('-'*25)
-	print('SA')
+	print('##### Supervisor with fault information #####')
 	print('-'*25)
-	print(SU[1].label)
+	print(FSA[1].label)
 	print('-'*25)
-	for x in SU[3]:
+	for x in FSA[3]:
 		print(str(x.label) + '=>' + str(x.output_transitions))
 	print('-'*25)
-	for x in SU[5]:
+	for x in FSA[5]:
 		print(x.label)
 	print('-'*25)
 
 	print('-'*25)
-	print('FA')
+	print('##### NY labeller #####')
 	print('-'*25)
-	print(NF[1].label)
+	print(NFA[1].label)
 	print('-'*25)
-	for x in NF[3]:
+	for x in NFA[3]:
 		print(str(x.label) + '=>' + str(x.output_transitions))
 	print('-'*25)
-	for x in NF[5]:
+	for x in NFA[5]:
 		print(x.label)
 	print('-'*25)
 	print("DONE READING TEST==============================")
 	##########################################################
 	##########################################################
 
-	#Intersection of events between SA and FA
-	intersectionSet = [] #                                      eventos de falha e idle
-	for eventNF in NF[5]:
-		for eventSU in SU[5]:	
-			if eventNF.label == eventSU.label:
-				intersectionSet.append(eventNF.label)
+	# Comments: It is not necessary to find the intersection set of events 
+	# because set of events NF is contained within set of events SU
+
+	# Intersection of events between SA and FA
+	# Comment: The set of events NF is contained within the set of events SU
+	intersectionSet = [] # eventos de falha e idle
+	for eventNFA in NFA[5]:
+		intersectionSet.append(eventNFA.label)
 	print('-'*25)
 	print('Intersection Set => ' + str(intersectionSet))
-	#                                                            pegando as falhas que fazem o NY progredir
+	# pegando as falhas que fazem o NY progredir
 
 	#Declaring supporting variables
 	global list_of_states
 	global AC_states
-	#global COAC_states
 	list_of_states = []
 	list_of_events = []
-	#marked_states = []
 	AC_states = []
-	#COAC_states = []
 
-	nf_initial=None
-	for check_initial in NF[3]:
-		if check_initial.is_initial == True:
-			nf_initial=check_initial
-			break
+	# nf_initial=None
+	# for check_initial in NF[3]:
+	# 	if check_initial.is_initial == True:
+	# 		nf_initial=check_initial
+	# 		break
 
-
-	#isso aqui não vai mais
 	'''
-	#Finding the fault event
-	for event in NF[5]:
-		#print(event.is_a_fault)
-		if event.is_a_fault:
-			faultEventLabel = event.label		
-			faultEventID = FA[4][FA[5].index(event)]
-			print('-'*25)
-			print('Fault Event => ' + str(faultEventLabel))
-			# print(faultEventID)
-			eventID = automataID + '_E0' #For the fault event
-			list_of_events.append(eventID)
-			list_of_results[5].append(event)
-			break	
-	'''
-
 	counterID=0
 	for stateSA in SU[3]:
 		stateID = automataID + '_S' + str(counterID)
@@ -122,7 +106,7 @@ def syncNF(automataID,SU,NF):
 			if transition_infoSA[1] not in intersectionSet:
 				outputTransition.append([transition_infoSA[0] + nf_initial.label, transition_infoSA[1]])
 			else:
-				nf_initial=NF[3][1]
+				nf_initial=NF[3][1] # Não entendi o motivo de atualizar a classe de estado
 				for transition_infoFA in nf_initial.output_transitions:
 					if transition_infoSA[1] == transition_infoFA[1]:
 						outputTransition.append([transition_infoSA[0] + transition_infoFA[0], transition_infoSA[1]])
@@ -136,40 +120,35 @@ def syncNF(automataID,SU,NF):
 		#Generating the state class
 		globals()[stateID] = state(stateLabel, stateMarking, stateInitial, output_transitions = outputTransition, input_transitions = [])
 		list_of_results[3].append(globals()[stateID])
+	'''
 
 	#Syncronizing states	
-	'''counterID = 0
-	for stateFA in FA[3]:
-		for stateSA in SA[3]:
+	counterID = 0
+	for stateNFA in NFA[3]:
+		for stateFSA in FSA[3]:
 			stateID = automataID + '_S' + str(counterID)
 			list_of_states.append(stateID)
-			stateLabel = stateSA.label + stateFA.label
-			stateMarking = bool(stateSA.is_marked * stateFA.is_marked)
-			stateInitial = bool(stateSA.is_initial * stateFA.is_initial)
-			# if stateMarking:
-			# 	marked_states.append(stateID)
+			stateLabel = stateFSA.label + stateNFA.label
+			stateMarking = bool(stateFSA.is_marked * stateNFA.is_marked)
+			stateInitial = bool(stateFSA.is_initial * stateNFA.is_initial)
 			if stateInitial:
 				initial_stateID = stateID 
 
 			outputTransition = []
-			for transition_infoSA in stateSA.output_transitions:
-				if transition_infoSA[1] not in intersectionSet:
-					outputTransition.append([transition_infoSA[0] + stateFA.label, transition_infoSA[1]])
+			for transition_infoFSA in stateFSA.output_transitions:
+				if transition_infoFSA[1] not in intersectionSet:
+					outputTransition.append([transition_infoFSA[0] + stateNFA.label, transition_infoFSA[1]])
 				else:
-					for transition_infoFA in stateFA.output_transitions:
-						if transition_infoSA[1] == transition_infoFA[1]:
-							outputTransition.append([transition_infoSA[0] + transition_infoFA[0], transition_infoSA[1]])
-							break
-			for transition_infoFA in stateFA.output_transitions:
-				if transition_infoFA[1] == faultEventLabel:
-					outputTransition.append([stateSA.label + transition_infoFA[0], faultEventLabel])
-					break
+					for transition_infoNFA in stateNFA.output_transitions:
+						if transition_infoFSA[1] == transition_infoNFA[1]:
+							outputTransition.append([transition_infoFSA[0] + transition_infoNFA[0], transition_infoFSA[1]])
+							break			
 			counterID += 1
 
 			#Generating the state class
 			globals()[stateID] = state(stateLabel, stateMarking, stateInitial, 
 				output_transitions = outputTransition, input_transitions = [])
-			list_of_results[3].append(globals()[stateID])'''
+			list_of_results[3].append(globals()[stateID])
 
 	#Updating input transitions
 	for source_state in list_of_states:
@@ -180,6 +159,8 @@ def syncNF(automataID,SU,NF):
 						[globals()[source_state].label, transition_info[1]])
 					break
 
+	#Removing states with empty input_transitions list (Accesible operation)
+	#Accesible part of the automata
 	print(globals()[initial_stateID].label)
 	AC_states.append(globals()[initial_stateID].label)
 	for transition_info in globals()[initial_stateID].output_transitions:
@@ -208,14 +189,14 @@ def syncNF(automataID,SU,NF):
 
 	#Generating the event class
 	counterID = 1
-	listIndex = len(SU[4])
+	listIndex = len(FSA[4])
 	for n in range(listIndex):
 		eventID = automataID + '_E' + str(counterID)
 		list_of_events.append(eventID)
 		counterID += 1
 
 	list_of_results[4] = list_of_events
-	list_of_results[5] += SU[5]
+	list_of_results[5] += FSA[5]
 
 	#Generating automata model
 	#Labelling the automata
@@ -440,7 +421,6 @@ def syncFault(automataID, SA, FA):
 
 
 			
-
 
 
 
