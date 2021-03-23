@@ -35,6 +35,9 @@ class automata:
 		self.set_of_events = set_of_events				#list
 		self.automata_type = automata_type				#string
 
+	def __repr__(self):
+		return self.label+"\n"+self.set_of_states+"\n"+self.set_of_events
+
 # TEST
 # class automata:
 # 	"""docstring for ClassName"""

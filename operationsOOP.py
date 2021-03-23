@@ -414,7 +414,31 @@ def syncFault(automataID, SA, FA):
 
 	return list_of_results
 	
+def duplicateStates(automataClass):
+	"""
+	Duplicar estados
+	Entrada NO
+	Saida NO
+	+de 1 entrada
+	"""
+	for node in automataClass.set_of_states:
+		node_selected = False
+		if len(node.input_transitions) > 1: # 1°
 
+			conditions=0
+			for input_ in node.input_transitions: # [[edge,state],[edge,state]...]
+				if automataClass.set_of_events[input_[0]].is_observable is False:
+					conditions+=1
+					break
+			if conditions == 1:
+				for outputs_ in node.output_transitions:
+					if automataClass.set_of_events[outputs_[0]].is_observable is False:
+						conditions+=1
+
+			if conditions == 2:
+				node_selected=True
+		if node_selected is True:
+			second_node = state() # Como vou criar um novo estado ?? :/
 
 	
 
