@@ -962,31 +962,45 @@ def syncFault(automataID, SA, FA):
 
 	return list_of_results
 	
-def duplicateStates(automataClass):
+def duplicateStates(automata_info):
 	"""
-	Duplicar estados
-	Entrada NO
-	Saida NO
-	+de 1 entrada
+	Duplicar estados\n
+	Entrada NO\n
+	Saida NO\n
+	\+ de 1 entrada
 	"""
-	for node in automataClass.set_of_states:
+	for node in automata_info[1].set_of_states:
 		node_selected = False
-		if len(node.input_transitions) > 1: # 1°
+		if len(node.input_transitions) > 1: # 1° (mais de 1 entrada)
 
 			conditions=0
 			for input_ in node.input_transitions: # [[edge,state],[edge,state]...]
-				if automataClass.set_of_events[input_[0]].is_observable is False:
-					conditions+=1
+				if automata_info[1].set_of_events[input_[0]].is_observable is False:
+					conditions+=1 # se tiver entrada n_obs
 					break
 			if conditions == 1:
 				for outputs_ in node.output_transitions:
-					if automataClass.set_of_events[outputs_[0]].is_observable is False:
-						conditions+=1
+					if automata_info[1].set_of_events[outputs_[0]].is_observable is True:
+						conditions+=1 # se tiver saida y_obs
 
 			if conditions == 2:
 				node_selected=True
 		if node_selected is True:
-			second_node = state() # Como vou criar um novo estado ?? :/
+			second_node = state('dup_'+node.label,node.is_marked,node.is_initial) # Como vou criar um novo estado ?? :/
+
+			# criar indices randomizados para acessar a lista de input_transitions
+			rand_index = [i for i in range(len(node.input_transitions))]
+			random.shuffle(rand_index)
+			for ii in range(len(node.input_transitions)):  # [state,event]
+				if random.randint(0, 1) == 0:
+					# passa metade randomizada para o novo estado
+					second_node.output_transitions.append(node.input_transitions[rand_index[ii]]) # adiciona input do antigo no output no novo
+					node.input_transitions.pop(rand_index[ii]) # tirar do anterior pra não dar errado
+
+			#colocar as saidas duplicadas nos lugares
+			second_node.output_transitions = node.output_transitions
+			automata_info[2].append(second_node.label)
+			automata_info[3].append(second_node)
 
 	
 
