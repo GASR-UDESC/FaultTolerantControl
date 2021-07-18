@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model version="2.1" type="FSA" id="pump">
+<data>
+	<state id="1">
+		<properties>
+			<initial />
+			<marked />
+		</properties>
+		<name>P1</name>
+	</state>
+	<state id="2">
+		<properties/>
+		<name>P2</name>
+	</state>
+	<event id="1">
+		<properties>
+			<controllable />
+			<observable />
+		</properties>
+		<name>P_start</name>
+	</event>
+	<event id="2">
+		<properties>
+			<controllable />
+			<observable />
+		</properties>
+		<name>P_stop</name>
+	</event>
+	<event id="3">
+		<properties>
+			<observable />
+		</properties>
+		<name>Sup_Inf</name>
+	</event>
+	<transition id="3" source="1" target="2" event="1">
+	</transition>
+	<transition id="4" source="2" target="1" event="2">
+	</transition>
+	<transition id="6" source="2" target="2" event="3">
+	</transition>
+</data>
+<meta tag="layout" version="2.1">
+	<font size="16.0"/>
+	<layout uniformnodes="false"/>
+	<state id="1">
+		<circle r="18.0" x="167.0" y="139.0" />
+		<arrow x="36.0" y="0.0" />
+	</state>
+	<state id="2">
+		<circle r="18.0" x="332.0" y="139.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<transition id="3">
+		<bezier x1="167.0" y1="139.0" x2="332.0" y2="139.0" ctrlx1="214.6313934326172" ctrly1="111.5" ctrlx2="284.36859130859375" ctrly2="111.5" />
+		<label x="6.0" y="-15.0" />
+	</transition>
+	<transition id="4">
+		<bezier x1="332.0" y1="139.0" x2="167.0" y2="139.0" ctrlx1="284.3686218261719" ctrly1="166.5" ctrlx2="214.63140869140625" ctrly2="166.5" />
+		<label x="1.0" y="12.0" />
+	</transition>
+	<transition id="6">
+		<bezier x1="332.0" y1="139.0" x2="332.0" y2="139.0" ctrlx1="281.08831787109375" ctrly1="88.08831787109375" ctrlx2="382.91168212890625" ctrly2="88.08831787109375" />
+		<label x="7.0" y="-13.0" />
+	</transition>
+</meta>
+</model>

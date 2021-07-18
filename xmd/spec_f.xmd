@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model version="2.1" type="FSA" id="spec_f">
+<data>
+	<state id="1">
+		<properties>
+			<initial />
+			<marked />
+		</properties>
+		<name>SF1</name>
+	</state>
+	<state id="2">
+		<properties>
+			<marked />
+		</properties>
+		<name>SF2</name>
+	</state>
+	<event id="1">
+		<properties>
+			<observable />
+		</properties>
+		<name>Sup_Inf</name>
+	</event>
+	<event id="2">
+		<properties>
+			<controllable />
+			<observable />
+		</properties>
+		<name>P_stop</name>
+	</event>
+	<transition id="3" source="1" target="2" event="1">
+	</transition>
+	<transition id="4" source="2" target="1" event="2">
+	</transition>
+	<transition id="6" source="2" target="2" event="1">
+	</transition>
+</data>
+<meta tag="layout" version="2.1">
+	<font size="12.0"/>
+	<layout uniformnodes="false"/>
+	<state id="1">
+		<circle r="19.5" x="233.0" y="162.0" />
+		<arrow x="37.5" y="0.0" />
+	</state>
+	<state id="2">
+		<circle r="19.5" x="371.0" y="161.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<transition id="3">
+		<bezier x1="233.0" y1="162.0" x2="371.0" y2="161.0" ctrlx1="272.6705017089844" ctrly1="138.71131896972656" ctrlx2="330.99615478515625" ctrly2="138.28868103027344" />
+		<label x="-3.0" y="-14.0" />
+	</transition>
+	<transition id="4">
+		<bezier x1="371.0" y1="161.0" x2="233.0" y2="162.0" ctrlx1="331.3294982910156" ctrly1="184.28868103027344" ctrlx2="273.00384521484375" ctrly2="184.71131896972656" />
+		<label x="-3.0" y="9.0" />
+	</transition>
+	<transition id="6">
+		<bezier x1="371.0" y1="161.0" x2="371.0" y2="161.0" ctrlx1="315.8456726074219" ctrly1="105.84567260742188" ctrlx2="426.1543273925781" ctrly2="105.84567260742188" />
+		<label x="5.0" y="-11.0" />
+	</transition>
+</meta>
+</model>

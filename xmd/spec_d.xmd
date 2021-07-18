@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model version="2.1" type="FSA" id="spec_d">
+<data>
+	<state id="1">
+		<properties>
+			<initial />
+			<marked />
+		</properties>
+		<name>SD1</name>
+	</state>
+	<state id="2">
+		<properties>
+			<marked />
+		</properties>
+		<name>SD2</name>
+	</state>
+	<event id="1">
+		<properties>
+			<controllable />
+			<observable />
+		</properties>
+		<name>VD_open</name>
+	</event>
+	<event id="2">
+		<properties>
+			<controllable />
+			<observable />
+		</properties>
+		<name>VC_close</name>
+	</event>
+	<transition id="7" source="1" target="2" event="2">
+	</transition>
+	<transition id="8" source="2" target="1" event="1">
+	</transition>
+</data>
+<meta tag="layout" version="2.1">
+	<font size="12.0"/>
+	<layout uniformnodes="false"/>
+	<state id="1">
+		<circle r="20.5" x="233.0" y="162.0" />
+		<arrow x="38.5" y="0.0" />
+	</state>
+	<state id="2">
+		<circle r="20.5" x="371.0" y="161.0" />
+		<arrow x="1.0" y="0.0" />
+	</state>
+	<transition id="7">
+		<bezier x1="233.0" y1="162.0" x2="371.0" y2="161.0" ctrlx1="272.6705017089844" ctrly1="138.71131896972656" ctrlx2="330.99615478515625" ctrly2="138.28868103027344" />
+		<label x="-3.0" y="-14.0" />
+	</transition>
+	<transition id="8">
+		<bezier x1="371.0" y1="161.0" x2="233.0" y2="162.0" ctrlx1="331.3294982910156" ctrly1="184.28868103027344" ctrlx2="273.00384521484375" ctrly2="184.71131896972656" />
+		<label x="-3.0" y="9.0" />
+	</transition>
+</meta>
+</model>
