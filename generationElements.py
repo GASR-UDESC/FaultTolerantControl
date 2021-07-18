@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 '''
 Code for Python 3
 Author: Herbert Leitão
@@ -13,14 +12,16 @@ from elementClasses import automata, state, event
 #automata_information = xmlAutomataImport('supervisor.xmd')
 
 #Generating automata elements
-def genElements(automataID, xmdFile):
+def genElements(automataID, xmdFile, **kwargs):
+	label = kwargs.get('label')
+
 	list_of_results = ['NaN','NaN',[],[],[],[]]	#[automataID, automata class, [states ID], ...
 												# ...[classes of states], [events ID], [classes of events]]
 
 	#Reading xmd file
-	automata_information = xmlAutomataImport(xmdFile)
+	automata_information = xmlAutomataImport(xmdFile, label = label)
 
-	# print('Transicoes')
+	# print('=======Transicoes')
 	# for x in automata_information[3]:
 	# 	print(x)
 
@@ -33,7 +34,7 @@ def genElements(automataID, xmdFile):
 	#stateID_model = 'A1_S'	#class ID representation A1S0 (Automata 1 State 0)...
 	#eventID_model = 'A1_E'	#class ID representation A1S0 (Automata 1 State 0)...
 
-	#Extracting information of the states [[LABEL], MARKING, INITIAL]
+	#Extracting information of the states [[LABEL], MARKING, INITIAL]] and output transitions
 	counterID = 0
 	for state_info in automata_information[1]:
 		stateID = automataID + '_S' + str(counterID)	 
@@ -47,13 +48,14 @@ def genElements(automataID, xmdFile):
 			#print('Update => ' + str(transition_info[2]) + str(transition_info[1]))
 		counterID += 1
 
-		print('stateID = ' + str(stateID))
-		print('stateMarking = ' + str(stateMarking))
-		print('stateInitial = ' + str(stateInitial))
-		print('outputTransition = ' + str(outputTransition))
+		# print('stateID = ' + str(stateID))
+		# print('stateMarking = ' + str(stateMarking))
+		# print('stateInitial = ' + str(stateInitial))
+		# print('outputTransition = ' + str(outputTransition))
 
 		#Generating the state class
-		globals()[stateID] = state(stateLabel, stateMarking, stateInitial,output_transitions = outputTransition, input_transitions = [])
+		globals()[stateID] = state(stateLabel, stateMarking, stateInitial, 
+			output_transitions = outputTransition, input_transitions = [])
 		list_of_results[3].append(globals()[stateID])
 
 	list_of_results[2] = list_of_states

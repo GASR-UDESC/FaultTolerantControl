@@ -31,565 +31,570 @@ def intersection(lst1, lst2):
 	lst3 = [value for value in lst1 if value in lst2] 
 	return lst3
 
-def unb_reach(NFA, classIndex):	# Unobservable reach
-	state_info1 = NFA[3][classIndex]	#State
-	chains = list()
-	state1Index = None
-	#flagCheck = False
-	if state_info1.id not in visited_states:
-		#print(state_info1.id)
-		visited_states.add(state_info1.id)
-		for OUTtransition_info in state_info1.output_transitions:
-			if OUTtransition_info[1] in set_of_UNOBSevents: # transition_info[1] = event label
-				#flagCheck = True
-				# print('encontrado!')
-				# print(state_info1.id)
-				# print(state_info1.label)
-				# print(OUTtransition_info)
-				if state_info1.id not in grpStates:
-					grpStates.append(state_info1.id)
-					state1Index = grpStates.index(state_info1.id)
-					partial_groups.append(list())
-				# self-loop
-				if OUTtransition_info[0] == state_info1.label:
-					print('Self-loop')
-					partial_groups[state1Index].append([state_info1.id])
-					#chains += [state_info1.id]
-				# the target state is other state
-				else:				
-					for state_info2 in NFA[3]:
-						class2Index = NFA[3].index(state_info2)							
-						if state_info2.label == OUTtransition_info[0]: # transition_info[1] = state label
-							#print(state_info2.id)
-							# the other state is a visited state
-							if state_info2.id in visited_states:
-								# the other state is either a visited and grouped state
-								if state_info2.id in grpStates:
-									print('Visited and grouped state')
-									state2Index = grpStates.index(state_info2.id)									
-									for groups in partial_groups[state2Index]:
-										partial_groups[state1Index].append([state_info1.id] + groups)										
-								# the other state is a visited state but does not belong to a group
-								else:
-									print('Visited and not grouped state')
-									partial_groups[state1Index].append([state_info1.id, state_info2.id])
-									grpStates.append(state_info2.id)
-									partial_groups.append(list())
-							# the other state is not a visited state	
-							else:
-								print('Not visited state')
-								chains = unb_reach(NFA, class2Index)
-								# print(chains)
-								# print(state1Index)
-								if not chains:
-									partial_groups[state1Index].append([state_info1.id, state_info2.id])
-									grpStates.append(state_info2.id)
-									partial_groups.append(list())
-								else:
-									for x in chains:										
-										partial_groups[state1Index].append([state_info1.id] + x)
-							break
-	if state1Index != None:
-		chains = partial_groups[state1Index]
+# def unb_reach(NFA, classIndex):	# Unobservable reach
+# 	state_info1 = NFA[3][classIndex]	#State
+# 	chains = list()
+# 	state1Index = None
+# 	#flagCheck = False
+# 	if state_info1.id not in visited_states:
+# 		#print(state_info1.id)
+# 		visited_states.add(state_info1.id)
+# 		for OUTtransition_info in state_info1.output_transitions:
+# 			if OUTtransition_info[1] in set_of_UNOBSevents: # transition_info[1] = event label
+# 				#flagCheck = True
+# 				# print('encontrado!')
+# 				# print(state_info1.id)
+# 				# print(state_info1.label)
+# 				# print(OUTtransition_info)
+# 				if state_info1.id not in grpStates:
+# 					grpStates.append(state_info1.id)
+# 					state1Index = grpStates.index(state_info1.id)
+# 					partial_groups.append(list())
+# 				# self-loop
+# 				if OUTtransition_info[0] == state_info1.label:
+# 					print('Self-loop')
+# 					partial_groups[state1Index].append([state_info1.id])
+# 					#chains += [state_info1.id]
+# 				# the target state is other state
+# 				else:				
+# 					for state_info2 in NFA[3]:
+# 						class2Index = NFA[3].index(state_info2)							
+# 						if state_info2.label == OUTtransition_info[0]: # transition_info[1] = state label
+# 							#print(state_info2.id)
+# 							# the other state is a visited state
+# 							if state_info2.id in visited_states:
+# 								# the other state is either a visited and grouped state
+# 								if state_info2.id in grpStates:
+# 									print('Visited and grouped state')
+# 									state2Index = grpStates.index(state_info2.id)									
+# 									for groups in partial_groups[state2Index]:
+# 										partial_groups[state1Index].append([state_info1.id] + groups)										
+# 								# the other state is a visited state but does not belong to a group
+# 								else:
+# 									print('Visited and not grouped state')
+# 									partial_groups[state1Index].append([state_info1.id, state_info2.id])
+# 									grpStates.append(state_info2.id)
+# 									partial_groups.append(list())
+# 							# the other state is not a visited state	
+# 							else:
+# 								#print('Not visited state')
+# 								chains = unb_reach(NFA, class2Index)
+# 								# print(chains)
+# 								# print(state1Index)
+# 								if not chains:
+# 									partial_groups[state1Index].append([state_info1.id, state_info2.id])
+# 									grpStates.append(state_info2.id)
+# 									partial_groups.append(list())
+# 								else:
+# 									for x in chains:										
+# 										partial_groups[state1Index].append([state_info1.id] + x)
+# 							break
+# 	if state1Index != None:
+# 		chains = partial_groups[state1Index]
 
-	return chains
+# 	return chains
 
-def observer(automataID, NFA):
-	global visited_states, grpStates, partial_groups, set_of_UNOBSevents
-	set_of_UNOBSevents = set()
-	list_of_results = [automataID,'NaN',[],[],[],[]]	#[automataID, automata class, [states ID], ...
-												# ...[classes of states], [events ID], [classes of events]
-	list_of_states = []
-	list_of_events = []
-	# # Checking output transitions
-	# for x in NFA[3]:
-	# 	print('STATE')
-	# 	for y in x.output_transitions:
-	# 		print(y)
-	# Creating a set of unobservable events
-	for event_info in NFA[5]:
-		if not event_info.is_observable:
-			set_of_UNOBSevents.add(event_info.label)
-		else:
-			list_of_events.append(NFA[4][NFA[5].index(event_info)])
-			list_of_results[5].append(event_info)
-	#print(set_of_UNOBSevents)	
-	visited_states = set()	# Set of visited states
-	grpStates = list()		# List of states belonging to groupings
-							# grpStates = [stateID, ...]
-	partial_groups = list()	# List composed by partial groups of states
+# def observer(automataID, NFA):
+# 	global visited_states, grpStates, partial_groups, set_of_UNOBSevents
+# 	set_of_UNOBSevents = set()
+# 	list_of_results = [automataID,'NaN',[],[],[],[]]	#[automataID, automata class, [states ID], ...
+# 												# ...[classes of states], [events ID], [classes of events]
+# 	list_of_states = []
+# 	list_of_events = []
+# 	# # Checking output transitions
+# 	# for x in NFA[3]:
+# 	# 	print('STATE')
+# 	# 	for y in x.output_transitions:
+# 	# 		print(y)
+# 	# Creating a set of unobservable events
+# 	for event_info in NFA[5]:
+# 		if not event_info.is_observable:
+# 			set_of_UNOBSevents.add(event_info.label)
+# 		else:
+# 			list_of_events.append(NFA[4][NFA[5].index(event_info)])
+# 			list_of_results[5].append(event_info)
+# 	#print(set_of_UNOBSevents)	
+# 	visited_states = set()	# Set of visited states
+# 	grpStates = list()		# List of states belonging to groupings
+# 							# grpStates = [stateID, ...]
+# 	partial_groups = list()	# List composed by partial groups of states
 
-	# joining states - Step 1 (Unobservable Events)
-	for classIndex in range(len(NFA[3])):
-		unb_reach(NFA, classIndex)
-	# print('-'*25)
-	print('Grouped States')
-	print(grpStates)	
-	# print('-'*25)
-	# print('partial_groups')
-	# print(partial_groups)
+# 	# joining states - Step 1 (Unobservable Events)
+# 	for classIndex in range(len(NFA[3])):
+# 		unb_reach(NFA, classIndex)
+# 	# print('-'*25)
+# 	print('Grouped States')
+# 	print(grpStates)	
+# 	# print('-'*25)
+# 	# print('partial_groups')
+# 	# print(partial_groups)
 
-	# Checking output transitions
-	print('-'*25)
-	for x in grpStates:
-		stateIndex = NFA[2].index(x)
-		print('')
-		print('-'*25)
-		print('STATE ' + str(x))
-		print(NFA[3][stateIndex].label)
-		print('Input Transitions')
-		for y in NFA[3][stateIndex].input_transitions:
-			print(y)
-			print('-'*25)
-		print('Output Transitions')
-		for y in NFA[3][stateIndex].output_transitions:
-			print(y)
-			print('-'*25)
+# 	# Checking output transitions
+# 	print('-'*25)
+# 	for x in grpStates:
+# 		stateIndex = NFA[2].index(x)
+# 		print('')
+# 		print('#'*25)
+# 		print('')
+# 		print('STATE ' + str(x) + ' => ' + str(NFA[3][stateIndex].label))
+# 		print('-'*25)
+# 		#print(NFA[3][stateIndex].label)
+# 		print('Input Transitions')
+# 		for y in NFA[3][stateIndex].input_transitions:
+# 			print(y)
+# 			print('-'*25)
+# 		print('Output Transitions')
+# 		for y in NFA[3][stateIndex].output_transitions:
+# 			print(y)
+# 		#print('-'*25)
 
-	step1Groups = list()
-	for groups in partial_groups:
-		for group in groups:
-			step1Groups.append(group)
+# 	step1Groups = list()
+# 	for groups in partial_groups:
+# 		for group in groups:
+# 			step1Groups.append(group)
 
-	# Converting step1Groups IDs in labels
-	step1Labels = list()
-	for group in step1Groups:
-		step1Labels.append([])
-		for stateID in group:
-			for x in NFA[3]:
-				if x.id == stateID:
-					step1Labels[-1].append(x.label)
+# 	# Converting step1Groups IDs in labels
+# 	step1Labels = list()
+# 	step1LabelsInfo = list()
+# 	for group in step1Groups:
+# 		step1LabelsInfo.append([])
+# 		for stateID in group:
+# 			for x in NFA[3]:
+# 				if x.id == stateID:
+# 					step1LabelsInfo[-1].append(x.label)
+# 					step1Labels.append(x.label)
 
-	print('')
-	print('Step 1 - Groups')
-	for x in step1Groups:
-		print(x)
-	print('')	
-	print('Step 1 - Labels')
-	for x in step1Labels:
-		print(x)
-	print('')
+# 	print('')
+# 	print('Step 1 - Groups')
+# 	for x in step1Groups:
+# 		print(x)
+# 	print('')	
+# 	print('Step 1 - Labels')
+# 	for x in step1LabelsInfo:
+# 		print(x)
+# 	print(step1Labels)
+# 	print('')
 	
-	flagContinue = True
-	newGroups = list()
+# 	flagContinue = True
+# 	newGroups = list()
 
-	while (flagContinue):		
-		# Joining states - Step 2		
-		step2Groups = list()
-		set_of_events = set()
-		list_of_states = list()
-		tempInfo = list()
-		print('')
-		print('-'*25)
-		print('###### NEW LOOP ######')
-		print('List of Transitions')
-		print('')
-		newGroups += step1Groups
+# 	while (flagContinue):		
+# 		# Joining states - Step 2		
+# 		step2Groups = list()
+# 		set_of_events = set()
+# 		list_of_states = list()
+# 		tempInfo = list()
+# 		print('')
+# 		print('-'*25)
+# 		print('###### NEW LOOP ######')
+# 		print('List of Transitions')
+# 		print('')
+# 		newGroups += step1Groups
 
-		print('')
-		print('-'*25)
-		print('New Group')
-		print('')
-		for x in newGroups:
-			print(x)
+# 		print('')
+# 		print('-'*25)
+# 		print('New Group')
+# 		print('')
+# 		for x in newGroups:
+# 			print(x)
 
-		counter = 1
-		for group in step1Groups:
-			list_of_transitions = list()
-			#itemZero = True				
-			newTransitions = list()
-			# Generating a list of transitions in order to evaluate new states for grouping
-			for stateID in group:
-				stateIndex = NFA[2].index(stateID)
-				for transition_info in NFA[3][stateIndex].output_transitions:
-					if transition_info[1] not in set_of_UNOBSevents:
-						list_of_transitions.append(transition_info)
-			# print('AQUI!!!')
-			# print(list_of_transitions)
-			print('')
-			print('List of Transitions in Group ' + str(counter))
-			counter += 1
-			#print(counter)		
-			for x in list_of_transitions:
-				print(x)
-			print('')
-			for x in list_of_transitions:
-				flagBreak = False
-				for y in newTransitions:
-					if x[1] == y[1]:
-						if x[0] not in y[0]: 
-							y[0].append(x[0])
-						flagBreak = True
-						break						
-				if not flagBreak:
-					newTransitions.append([[x[0]],x[1]])
-			tempInfo.append(newTransitions)
-		print('-'*25)
-		print('')
-		print('Step 2 - Groups')
-		counter = 1
-		for x in tempInfo:
-			print('Group ' + str(counter))
-			counter += 1
-			for y in x:
-				print(y)
-		# Organizing and prospecting possible groups in tempInfo
-		print('')
-		print('-'*25)
-		for x in tempInfo:
-			for y in x:
-				if len(y[0]) > 1:
-					#print(y[0])
-					print('OK')
-					list_of_IDs = list()
-					for item in range(len(y[0])):
-						for state_info1 in NFA[3]:
-							if state_info1.label == y[0][item]:
-								list_of_IDs.append(state_info1.id)
-								break
-					#print(list_of_IDs)
-					if list_of_IDs not in newGroups and list_of_IDs not in step2Groups:
-						step2Groups.append(list_of_IDs)
-		print('Step 2 Final Groups')
-		for x in step2Groups:
-			print(x)
-		if step2Groups:
-			step1Groups = step2Groups			
-		else:
-			step1Groups = list()			
-			flagContinue = False
+# 		counter = 1
+# 		for group in step1Groups:
+# 			list_of_transitions = list()
+# 			#itemZero = True				
+# 			newTransitions = list()
+# 			# Generating a list of transitions in order to evaluate new states for grouping
+# 			for stateID in group:
+# 				stateIndex = NFA[2].index(stateID)
+# 				for transition_info in NFA[3][stateIndex].output_transitions:
+# 					if transition_info[1] not in set_of_UNOBSevents:
+# 						list_of_transitions.append(transition_info)
+# 			# print('AQUI!!!')
+# 			# print(list_of_transitions)
+# 			print('')
+# 			print('List of Transitions in Group ' + str(counter))
+# 			counter += 1
+# 			#print(counter)		
+# 			for x in list_of_transitions:
+# 				print(x)
+# 			print('')
+# 			for x in list_of_transitions:
+# 				flagBreak = False
+# 				for y in newTransitions:
+# 					if x[1] == y[1]:
+# 						if x[0] not in y[0]: 
+# 							y[0].append(x[0])
+# 						flagBreak = True
+# 						break						
+# 				if not flagBreak:
+# 					newTransitions.append([[x[0]],x[1]])
+# 			tempInfo.append(newTransitions)
+# 		print('-'*25)
+# 		print('')
+# 		print('Step 2 - Groups')
+# 		counter = 1
+# 		for x in tempInfo:
+# 			print('Group ' + str(counter))
+# 			counter += 1
+# 			for y in x:
+# 				print(y)
+# 		# Organizing and prospecting possible groups in tempInfo
+# 		print('')
+# 		print('-'*25)
+# 		for x in tempInfo:
+# 			for y in x:
+# 				if len(y[0]) > 1:
+# 					#print(y[0])
+# 					print('OK')
+# 					list_of_IDs = list()
+# 					for item in range(len(y[0])):
+# 						for state_info1 in NFA[3]:
+# 							if state_info1.label == y[0][item]:
+# 								list_of_IDs.append(state_info1.id)
+# 								break
+# 					#print(list_of_IDs)
+# 					if list_of_IDs not in newGroups and list_of_IDs not in step2Groups:
+# 						step2Groups.append(list_of_IDs)
+# 		print('Step 2 Final Groups')
+# 		for x in step2Groups:
+# 			print(x)
+# 		if step2Groups:
+# 			step1Groups = step2Groups			
+# 		else:
+# 			step1Groups = list()			
+# 			flagContinue = False
 
-	for groups in newGroups:
-		for stateID in groups:
-			if stateID not in grpStates:
-				grpStates.append(stateID)
+# 	for groups in newGroups:
+# 		for stateID in groups:
+# 			if stateID not in grpStates:
+# 				grpStates.append(stateID)
 
 
-	print('###### Partial Groups ######')
-	for x in partial_groups:
-		print(x)
+# 	print('###### New Groups ######')
+# 	for x in newGroups:
+# 		print(x)
 	
-	# mainGroups = list()
-	# # Separating the main chains
-	# for x1 in partial_groups:	# a list of lists of grouped states
-	# 	for y1 in x1:			# a list of grouped states
-	# 		flagBreak = False
-	# 		for x2 in partial_groups:
-	# 			if x1 == x2:
-	# 				#break
-	# 				continue
-	# 			for y2 in x2:
-	# 				if y1 in y2:
-	# 					flagBreak = True
-	# 					break
-	# 			if flagBreak:
-	# 				break
-	# 		if flagBreak:
-	# 			continue
-	# 		mainGroups.append(y1)
-	# print('-'*25)
-	# print('Main Groups')
-	# print(mainGroups)
+# 	# mainGroups = list()
+# 	# # Separating the main chains
+# 	# for x1 in partial_groups:	# a list of lists of grouped states
+# 	# 	for y1 in x1:			# a list of grouped states
+# 	# 		flagBreak = False
+# 	# 		for x2 in partial_groups:
+# 	# 			if x1 == x2:
+# 	# 				#break
+# 	# 				continue
+# 	# 			for y2 in x2:
+# 	# 				if y1 in y2:
+# 	# 					flagBreak = True
+# 	# 					break
+# 	# 			if flagBreak:
+# 	# 				break
+# 	# 		if flagBreak:
+# 	# 			continue
+# 	# 		mainGroups.append(y1)
+# 	# print('-'*25)
+# 	# print('Main Groups')
+# 	# print(mainGroups)
 
-	mainGroups = list()
-	checkedStates = set()
-	# Listing the groups	
-	for y1 in newGroups:			
-		if len(y1) == 1: # This is the case when a state has self-loop by unobservable event
-			mainGroups.append(y1)
-		else:
-			state1Index = NFA[2].index(y1[0])
-			#print(state1Index)
-			if NFA[3][state1Index].is_initial:	# In this case the group is a state
-				mainGroups.append(y1)			# in the observer
-			else:
-				for transition_info in NFA[3][state1Index].input_transitions:
-					if transition_info[1] not in set_of_UNOBSevents: 	# In this case the group is a state
-						mainGroups.append(y1)							# in the observer
-						break				
-			if y1[-1] not in checkedStates:			# This test is important because the last state in a 
-				print(y1[-1])						# group can have a input transition by observable event
-				checkedStates.add(y1[-1])			# and, at the same time, this state can be grouped
-				state2Index = NFA[2].index(y1[-1])
-				print(state2Index)
-				for transition_info in NFA[3][state2Index].input_transitions:
-					if transition_info[1] not in set_of_UNOBSevents:
-						print(NFA[3][state2Index].label)
-						print(transition_info)
-						mainGroups.append([y1[-1]])
-						break
-	print('-'*25)
-	print('Main Groups')
-	for x in mainGroups:
-		print(x)
+# 	mainGroups = list()
+# 	checkedStates = set()
+# 	# Listing the groups	
+# 	for y1 in newGroups:			
+# 		if len(y1) == 1: # This is the case when a state has self-loop by unobservable event
+# 			mainGroups.append(y1)
+# 		else:
+# 			state1Index = NFA[2].index(y1[0])
+# 			#print(state1Index)
+# 			if NFA[3][state1Index].is_initial:	# In this case the group is a state
+# 				mainGroups.append(y1)			# in the observer
+# 			else:
+# 				for transition_info in NFA[3][state1Index].input_transitions:
+# 					if transition_info[1] not in set_of_UNOBSevents: 	# In this case the group is a state
+# 						mainGroups.append(y1)							# in the observer
+# 						break				
+# 			if y1[-1] not in checkedStates:			# This test is important because the last state in a 
+# 				print(y1[-1])						# group can have a input transition by observable event
+# 				checkedStates.add(y1[-1])			# and, at the same time, this state can be grouped
+# 				state2Index = NFA[2].index(y1[-1])
+# 				print(state2Index)
+# 				for transition_info in NFA[3][state2Index].input_transitions:
+# 					if transition_info[1] not in set_of_UNOBSevents:
+# 						print(NFA[3][state2Index].label)
+# 						print(transition_info)
+# 						mainGroups.append([y1[-1]])
+# 						break
+# 	print('-'*25)
+# 	print('Main Groups')
+# 	for x in mainGroups:
+# 		print(x)
 	
-	# Generating an empty list for including the IDs of the new states
-	# and [stateID, state reference] for updating the new states later
-	mainGroupsIDs = [[],[]]
-	for x in range(len(mainGroups)):
-		mainGroupsIDs[0].append(None)
-		mainGroupsIDs[1].append([])
-	print(mainGroupsIDs)
+# 	# Generating an empty list for including the IDs of the new states
+# 	# and [stateID, state reference] for updating the new states later
+# 	mainGroupsIDs = [[],[]]
+# 	for x in range(len(mainGroups)):
+# 		mainGroupsIDs[0].append(None)
+# 		mainGroupsIDs[1].append([])
+# 	print(mainGroupsIDs)
 	
-	#######################################
-	# Generating a list of grouped labels for optimizing the process to generate the observer
-	label_grpStates = list()
-	label_mainGroups = list()
-	grpReference = list()		# List of references State => Groups
-	for x in range(len(grpStates)):
-		label_grpStates.append([])
-		grpReference.append([])
-	for state_info1 in NFA[3]:
-		if state_info1.id in grpStates:
-			listIndex = grpStates.index(state_info1.id)
-			label_grpStates[listIndex] += state_info1.label
-	print('-'*25)
-	print('Grouped Labels')
-	print(label_grpStates)
+# 	#######################################
+# 	# Generating a list of grouped labels for optimizing the process to generate the observer
+# 	label_grpStates = list()
+# 	label_mainGroups = list()
+# 	grpReference = list()		# List of references State => Groups
+# 	for x in range(len(grpStates)):
+# 		label_grpStates.append([])
+# 		grpReference.append([])
+# 	for state_info1 in NFA[3]:
+# 		if state_info1.id in grpStates:
+# 			listIndex = grpStates.index(state_info1.id)
+# 			label_grpStates[listIndex] += state_info1.label
+# 	print('-'*25)
+# 	print('Grouped Labels')
+# 	print(label_grpStates)
 	
-	counterList = 0
-	for sublist in mainGroups:
-		label_mainGroups.append([])
-		for stateID in sublist:
-			listIndex = grpStates.index(stateID)
-			label_mainGroups[-1] += label_grpStates[listIndex]
-			grpReference[listIndex].append(counterList)
-		counterList += 1
-	print('-'*25)
-	print('Label of the Grouped States')
-	for x in label_mainGroups:
-		print(x)
-	print('-'*25)
-	print('References of the States in Grouped States')
-	print(grpReference)
-	#######################################
-	#######################################
+# 	counterList = 0
+# 	for sublist in mainGroups:
+# 		label_mainGroups.append([])
+# 		for stateID in sublist:
+# 			listIndex = grpStates.index(stateID)
+# 			label_mainGroups[-1] += label_grpStates[listIndex]
+# 			grpReference[listIndex].append(counterList)
+# 		counterList += 1
+# 	print('-'*25)
+# 	print('Label of the Grouped States')
+# 	for x in label_mainGroups:
+# 		print(x)
+# 	print('-'*25)
+# 	print('References of the States in Grouped States')
+# 	print(grpReference)
+# 	#######################################
+# 	#######################################
 	
-	#######################################
-	# Generating Observer Automata	
-	flagFaultLabel = False	# Test to evaluate the fault diagnosability
-	set_badStates = set()	# Information to support safe controllability test
-	counterID = 0
-	counterS = 0	
-	newStatesEval = set() 	# intermediary states in grouped states that needs to be evaluated after
-							# for including transitions in the new state
-	for state_info1 in NFA[3]:
-		# Not grouped states
-		if state_info1.id not in grpStates:
-			counterS += 1
-			print('State ' + str(counterS) + ' => ' + str(state_info1.label))
-			# New ID
-			state_info1.id = automataID + '_S' + str(counterID)
-			list_of_states.append(state_info1.id)
-			# This attribute doesn't exist in the observer
-			state_info1.is_marked = None
-			# Evaluating the fault diagnosability
-			if state_info1.label[1] == 'Y' or state_info1.label[1] == 'F':
-				flagFaultLabel = True
-			# Registering bad states
-			if state_info1.label[2] == 'B':
-				set_badStates.add(state_info1.id)
-			######################################
-			# Updating input transitions
-			newTransitions = list()
-			for transition_info in reversed(state_info1.input_transitions):
-				# Option 1 => the source state belongs to grouped states
-				if transition_info[0] in label_grpStates:
-					stateIndex = label_grpStates.index(transition_info[0])					
-					for ref in grpReference[stateIndex]:
-						newTransition = [label_mainGroups[ref], transition_info[1]]
-						if newTransition not in newTransitions:
-							newTransitions.append(newTransition)
-					state_info1.input_transitions.remove(transition_info)
-				# Option 2 => the source state doesn't belong to grouped states
-				# Nothing to do!
+# 	#######################################
+# 	# Generating Observer Automata	
+# 	flagFaultLabel = False	# Test to evaluate the fault diagnosability
+# 	set_badStates = set()	# Information to support safe controllability test
+# 	counterID = 0
+# 	counterS = 0	
+# 	newStatesEval = set() 	# intermediary states in grouped states that needs to be evaluated after
+# 							# for including transitions in the new state
+# 	for state_info1 in NFA[3]:
+# 		# Not grouped states
+# 		if state_info1.id not in grpStates:
+# 			counterS += 1
+# 			print('State ' + str(counterS) + ' => ' + str(state_info1.label))
+# 			# New ID
+# 			state_info1.id = automataID + '_S' + str(counterID)
+# 			list_of_states.append(state_info1.id)
+# 			# This attribute doesn't exist in the observer
+# 			state_info1.is_marked = None
+# 			# Evaluating the fault diagnosability
+# 			if state_info1.label[1] == 'Y' or state_info1.label[1] == 'F':
+# 				flagFaultLabel = True
+# 			# Registering bad states
+# 			if state_info1.label[2] == 'B':
+# 				set_badStates.add(state_info1.id)
+# 			######################################
+# 			# Updating input transitions
+# 			newTransitions = list()
+# 			for transition_info in reversed(state_info1.input_transitions):
+# 				# Option 1 => the source state belongs to grouped states
+# 				if transition_info[0] in label_grpStates:
+# 					stateIndex = label_grpStates.index(transition_info[0])					
+# 					for ref in grpReference[stateIndex]:
+# 						newTransition = [label_mainGroups[ref], transition_info[1]]
+# 						if newTransition not in newTransitions:
+# 							newTransitions.append(newTransition)
+# 					state_info1.input_transitions.remove(transition_info)
+# 				# Option 2 => the source state doesn't belong to grouped states
+# 				# Nothing to do!
 
-			#Updating input transitions list
-			state_info1.input_transitions += newTransitions
-			######################################
+# 			#Updating input transitions list
+# 			state_info1.input_transitions += newTransitions
+# 			######################################
 
-			######################################
-			# Updating output transitions
-			newTransitions = list()
-			for transition_info in reversed(state_info1.output_transitions):
-				# Option 1 => the source state belongs to grouped states
-				if transition_info[0] in label_grpStates:
-					stateIndex = label_grpStates.index(transition_info[0])					
-					for ref in grpReference[stateIndex]:
-						newTransition = [label_mainGroups[ref], transition_info[1]]
-						if newTransition not in newTransitions:
-							newTransitions.append(newTransition)						
-					state_info1.output_transitions.remove(transition_info)
-				# Option 2 => the source state doesn't belong to grouped states
-				# Nothing to do!
+# 			######################################
+# 			# Updating output transitions
+# 			newTransitions = list()
+# 			for transition_info in reversed(state_info1.output_transitions):
+# 				# Option 1 => the source state belongs to grouped states
+# 				if transition_info[0] in label_grpStates:
+# 					stateIndex = label_grpStates.index(transition_info[0])					
+# 					for ref in grpReference[stateIndex]:
+# 						newTransition = [label_mainGroups[ref], transition_info[1]]
+# 						if newTransition not in newTransitions:
+# 							newTransitions.append(newTransition)						
+# 					state_info1.output_transitions.remove(transition_info)
+# 				# Option 2 => the source state doesn't belong to grouped states
+# 				# Nothing to do!
 
-			#Updating output transitions list
-			state_info1.output_transitions += newTransitions
-			######################################
-			# print('-'*25)
-			# print('Check New Single State')
-			# print(state_info1.id)
-			# print(state_info1.label)
-			# print(state_info1.is_initial)
-			# print('Input Transitions')
-			# for x in state_info1.input_transitions:
-			# 	print(x)
-			# print('Output Transitions')
-			# for x in state_info1.output_transitions:
-			# 	print(x)
-			globals()[state_info1.id] = state_info1		
-			list_of_results[3].append(globals()[state_info1.id])
-			# print('###### LABEL CHECK ######')
-			# print(list_of_results[3][-1].label)
-			counterID += 1
+# 			#Updating output transitions list
+# 			state_info1.output_transitions += newTransitions
+# 			######################################
+# 			# print('-'*25)
+# 			# print('Check New Single State')
+# 			# print(state_info1.id)
+# 			# print(state_info1.label)
+# 			# print(state_info1.is_initial)
+# 			# print('Input Transitions')
+# 			# for x in state_info1.input_transitions:
+# 			# 	print(x)
+# 			# print('Output Transitions')
+# 			# for x in state_info1.output_transitions:
+# 			# 	print(x)
+# 			globals()[state_info1.id] = state_info1		
+# 			list_of_results[3].append(globals()[state_info1.id])
+# 			# print('###### LABEL CHECK ######')
+# 			# print(list_of_results[3][-1].label)
+# 			counterID += 1
 		
-		# Grouped states
-		else:
-			for grp in mainGroups:
-				grpIndex = mainGroups.index(grp)			
-				if state_info1.id == grp[0]:					
-					# New ID
-					stateID = automataID + '_S' + str(counterID)
-					list_of_states.append(stateID)
-					mainGroupsIDs[0][grpIndex] = stateID
-					# New label
-					stateLabel = label_mainGroups[grpIndex]
-					# Verifying if it is an initial state
-					stateInitial = state_info1.is_initial
-					# This attribute doesn't exist in the observer
-					stateMarking = None			
-					# Evaluating the fault diagnosability
-					set_of_labels = set()
-					for x in range(1,len(stateLabel),3):
-						set_of_labels.add(x)
-					if 'N' not in set_of_labels:
-						flagFaultLabel = True
-					# Registering bad states
-					for x in range(2,len(stateLabel),3):
-						if x == 'B':
-							set_badStates.add(stateID)
-							break
-					######################################
-					# Updating input transitions
-					newInputTransitions = list()
-					for transition_info in reversed(state_info1.input_transitions):
-						# Option 1 => the source state belongs to grouped states
-						if transition_info[0] in label_grpStates:
-							stateIndex = label_grpStates.index(transition_info[0])					
-							for ref in grpReference[stateIndex]:
-								newTransition = [label_mainGroups[ref], transition_info[1]]
-								if newTransition not in newInputTransitions:
-									newInputTransitions.append(newTransition)							
-						# Option 2 => the source state doesn't belong to grouped states
-						else:
-							newInputTransitions.append(transition_info)
-					######################################
-					######################################
-					# Updating output transitions
-					newOutputTransitions = list()
-					for transition_info in reversed(state_info1.output_transitions):
-						# Option 1 => the source state belongs to grouped states
-						if transition_info[0] in label_grpStates:
-							stateIndex = label_grpStates.index(transition_info[0])					
-							for ref in grpReference[stateIndex]:
-								newTransition = [label_mainGroups[ref], transition_info[1]]
-								if newTransition not in newOutputTransitions:
-									newOutputTransitions.append(newTransition)							
-						# Option 2 => the source state doesn't belong to grouped states
-						else:
-							newOutputTransitions.append(transition_info)
-					######################################
-					#Generating the new state class
-					globals()[stateID] = state(stateLabel, stateMarking, stateInitial, 
-						input_transitions = newInputTransitions, output_transitions = newOutputTransitions)
-					list_of_results[3].append(globals()[stateID])
-					counterID += 1
-					######################################
-					# print('-'*25)
-					# print('Check New Grouped State')
-					# print(state_info1.id)
-					# print(state_info1.label)
-					# print(state_info1.is_initial)
-					# print('Input Transitions')
-					# for x in state_info1.input_transitions:
-					# 	print(x)
-					# print('Output Transitions')
-					# for x in state_info1.output_transitions:
-					# 	print(x)
-				#
-				elif state_info1.id in grp:
-					mainGroupsIDs[1][grpIndex].append([state_info1.id, NFA[3].index(state_info1)])
-	# Updating the new states
-	for x in range(len(mainGroupsIDs[0])):
-		updState = globals()[mainGroupsIDs[0][x]]
-		for reference in mainGroupsIDs[1][x]:
-			state_info1 = NFA[3][reference[1]]
-			#print(reference)
-			######################################
-			# Updating input transitions			
-			for transition_info in reversed(state_info1.input_transitions):
-				# Option 1 => the source state belongs to grouped states
-				if transition_info[0] in label_grpStates:
-					stateIndex = label_grpStates.index(transition_info[0])					
-					for ref in grpReference[stateIndex]:
-						newTransition = [label_mainGroups[ref], transition_info[1]]	
-						if newTransition not in updState.input_transitions:
-							updState.input_transitions.append(newTransition)
-							print(newTransition)						
-				# Option 2 => the source state doesn't belong to grouped states
-				else:
-					if transition_info not in updState.input_transitions:
-						updState.input_transitions.append(transition_info)
-						print(transition_info)
-			######################################
-			######################################
-			# Updating output transitions			
-			for transition_info in reversed(state_info1.output_transitions):
-				# Option 1 => the source state belongs to grouped states
-				if transition_info[0] in label_grpStates:
-					stateIndex = label_grpStates.index(transition_info[0])					
-					for ref in grpReference[stateIndex]:
-						newTransition = [label_mainGroups[ref], transition_info[1]]
-						if newTransition not in updState.output_transitions:
-							updState.output_transitions.append(newTransition)
-							print(newTransition)							
-				# Option 2 => the source state doesn't belong to grouped states
-				else:
-					if transition_info not in updState.output_transitions:
-						updState.output_transitions.append(transition_info)
-						print(transition_info)
-			######################################
+# 		# Grouped states
+# 		else:
+# 			for grp in mainGroups:
+# 				grpIndex = mainGroups.index(grp)			
+# 				if state_info1.id == grp[0]:					
+# 					# New ID
+# 					stateID = automataID + '_S' + str(counterID)
+# 					list_of_states.append(stateID)
+# 					mainGroupsIDs[0][grpIndex] = stateID
+# 					# New label
+# 					stateLabel = label_mainGroups[grpIndex]
+# 					# Verifying if it is an initial state
+# 					stateInitial = state_info1.is_initial
+# 					# This attribute doesn't exist in the observer
+# 					stateMarking = None			
+# 					# Evaluating the fault diagnosability
+# 					set_of_labels = set()
+# 					for x in range(1,len(stateLabel),3):
+# 						set_of_labels.add(x)
+# 					if 'N' not in set_of_labels:
+# 						flagFaultLabel = True
+# 					# Registering bad states
+# 					for x in range(2,len(stateLabel),3):
+# 						if x == 'B':
+# 							set_badStates.add(stateID)
+# 							break
+# 					######################################
+# 					# Updating input transitions
+# 					newInputTransitions = list()
+# 					for transition_info in reversed(state_info1.input_transitions):
+# 						# Option 1 => the source state belongs to grouped states
+# 						if transition_info[0] in label_grpStates:
+# 							stateIndex = label_grpStates.index(transition_info[0])					
+# 							for ref in grpReference[stateIndex]:
+# 								newTransition = [label_mainGroups[ref], transition_info[1]]
+# 								if newTransition not in newInputTransitions:
+# 									newInputTransitions.append(newTransition)							
+# 						# Option 2 => the source state doesn't belong to grouped states
+# 						else:
+# 							newInputTransitions.append(transition_info)
+# 					######################################
+# 					######################################
+# 					# Updating output transitions
+# 					newOutputTransitions = list()
+# 					for transition_info in reversed(state_info1.output_transitions):
+# 						# Option 1 => the source state belongs to grouped states
+# 						if transition_info[0] in label_grpStates:
+# 							stateIndex = label_grpStates.index(transition_info[0])					
+# 							for ref in grpReference[stateIndex]:
+# 								newTransition = [label_mainGroups[ref], transition_info[1]]
+# 								if newTransition not in newOutputTransitions:
+# 									newOutputTransitions.append(newTransition)							
+# 						# Option 2 => the source state doesn't belong to grouped states
+# 						else:
+# 							newOutputTransitions.append(transition_info)
+# 					######################################
+# 					#Generating the new state class
+# 					globals()[stateID] = state(stateLabel, stateMarking, stateInitial, 
+# 						input_transitions = newInputTransitions, output_transitions = newOutputTransitions)
+# 					list_of_results[3].append(globals()[stateID])
+# 					counterID += 1
+# 					######################################
+# 					# print('-'*25)
+# 					# print('Check New Grouped State')
+# 					# print(state_info1.id)
+# 					# print(state_info1.label)
+# 					# print(state_info1.is_initial)
+# 					# print('Input Transitions')
+# 					# for x in state_info1.input_transitions:
+# 					# 	print(x)
+# 					# print('Output Transitions')
+# 					# for x in state_info1.output_transitions:
+# 					# 	print(x)
+# 				#
+# 				elif state_info1.id in grp:
+# 					mainGroupsIDs[1][grpIndex].append([state_info1.id, NFA[3].index(state_info1)])
+# 	# Updating the new states
+# 	for x in range(len(mainGroupsIDs[0])):
+# 		updState = globals()[mainGroupsIDs[0][x]]
+# 		for reference in mainGroupsIDs[1][x]:
+# 			state_info1 = NFA[3][reference[1]]
+# 			#print(reference)
+# 			######################################
+# 			# Updating input transitions			
+# 			for transition_info in reversed(state_info1.input_transitions):
+# 				# Option 1 => the source state belongs to grouped states
+# 				if transition_info[0] in label_grpStates:
+# 					stateIndex = label_grpStates.index(transition_info[0])					
+# 					for ref in grpReference[stateIndex]:
+# 						newTransition = [label_mainGroups[ref], transition_info[1]]	
+# 						if newTransition not in updState.input_transitions:
+# 							updState.input_transitions.append(newTransition)
+# 							print(newTransition)						
+# 				# Option 2 => the source state doesn't belong to grouped states
+# 				else:
+# 					if transition_info not in updState.input_transitions:
+# 						updState.input_transitions.append(transition_info)
+# 						print(transition_info)
+# 			######################################
+# 			######################################
+# 			# Updating output transitions			
+# 			for transition_info in reversed(state_info1.output_transitions):
+# 				# Option 1 => the source state belongs to grouped states
+# 				if transition_info[0] in label_grpStates:
+# 					stateIndex = label_grpStates.index(transition_info[0])					
+# 					for ref in grpReference[stateIndex]:
+# 						newTransition = [label_mainGroups[ref], transition_info[1]]
+# 						if newTransition not in updState.output_transitions:
+# 							updState.output_transitions.append(newTransition)
+# 							print(newTransition)							
+# 				# Option 2 => the source state doesn't belong to grouped states
+# 				else:
+# 					if transition_info not in updState.output_transitions:
+# 						updState.output_transitions.append(transition_info)
+# 						print(transition_info)
+# 			######################################
 		
 
-	#print(mainGroupsIDs)
-	#Generating automata model
-	#Labelling the automata
-	automataLabel = automataID
+# 	#print(mainGroupsIDs)
+# 	#Generating automata model
+# 	#Labelling the automata
+# 	automataLabel = automataID
 
-	globals()[automataID] = automata(automataLabel, list_of_states, list_of_events, 'NaN')
-	list_of_results[0] = automataID
-	list_of_results[1] = globals()[automataID]
-	list_of_results[2] = list_of_states
-	list_of_results[4] = list_of_events
+# 	globals()[automataID] = automata(automataLabel, list_of_states, list_of_events, 'NaN')
+# 	list_of_results[0] = automataID
+# 	list_of_results[1] = globals()[automataID]
+# 	list_of_results[2] = list_of_states
+# 	list_of_results[4] = list_of_events
 
-	print('')
-	print('-'*25)
-	print('SUMMARY REPORT')
-	counterStates = 0
-	counterTransitions = 0
-	print('')
-	print('States')
-	for x in list_of_results[3]:
-		counterStates+=1
-		print(x.label)
-		for y in x.output_transitions:
-			counterTransitions+=1
-	print('Number of States = ' + str(counterStates))
-	print('Number of Transitions = ' + str(counterTransitions))
+# 	print('')
+# 	print('-'*25)
+# 	print('SUMMARY REPORT')
+# 	counterStates = 0
+# 	counterTransitions = 0
+# 	print('')
+# 	print('States')
+# 	for x in list_of_results[3]:
+# 		counterStates+=1
+# 		print(x.label)
+# 		for y in x.output_transitions:
+# 			counterTransitions+=1
+# 	print('Number of States = ' + str(counterStates))
+# 	print('Number of Transitions = ' + str(counterTransitions))
 	
-	return list_of_results
-	# #######################################
-	# ####################################
+# 	return list_of_results
+# 	# #######################################
+# 	# ####################################
 
 def syncLAB(automataID,FSA,NFA): 	# FSA = Automata (Fault + Supervisor)
 									# NFA = Automata (BNB-NF Labeller)
@@ -962,45 +967,7 @@ def syncFault(automataID, SA, FA):
 
 	return list_of_results
 	
-def duplicateStates(automata_info):
-	"""
-	Duplicar estados\n
-	Entrada NO\n
-	Saida NO\n
-	\+ de 1 entrada
-	"""
-	for node in automata_info[1].set_of_states:
-		node_selected = False
-		if len(node.input_transitions) > 1: # 1° (mais de 1 entrada)
 
-			conditions=0
-			for input_ in node.input_transitions: # [[edge,state],[edge,state]...]
-				if automata_info[1].set_of_events[input_[0]].is_observable is False:
-					conditions+=1 # se tiver entrada n_obs
-					break
-			if conditions == 1:
-				for outputs_ in node.output_transitions:
-					if automata_info[1].set_of_events[outputs_[0]].is_observable is True:
-						conditions+=1 # se tiver saida y_obs
-
-			if conditions == 2:
-				node_selected=True
-		if node_selected is True:
-			second_node = state('dup_'+node.label,node.is_marked,node.is_initial) # Como vou criar um novo estado ?? :/
-
-			# criar indices randomizados para acessar a lista de input_transitions
-			rand_index = [i for i in range(len(node.input_transitions))]
-			random.shuffle(rand_index)
-			for ii in range(len(node.input_transitions)):  # [state,event]
-				if random.randint(0, 1) == 0:
-					# passa metade randomizada para o novo estado
-					second_node.output_transitions.append(node.input_transitions[rand_index[ii]]) # adiciona input do antigo no output no novo
-					node.input_transitions.pop(rand_index[ii]) # tirar do anterior pra não dar errado
-
-			#colocar as saidas duplicadas nos lugares
-			second_node.output_transitions = node.output_transitions
-			automata_info[2].append(second_node.label)
-			automata_info[3].append(second_node)
 
 	
 

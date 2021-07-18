@@ -31,22 +31,40 @@ def str2list(string):
 	            string2 += c
 	return string2
 
+def str2listB(string):
+	string1 = string
+	#print(string1)	
+	newLabel = list()	
+	string2 = ''	
+	for c in string1:
+		if c != '(' and c != ')':			
+			if c == ' ':
+				continue
+			elif c == ',':
+				newLabel.append(string2)
+				string2 = ''				
+			else:
+				string2 += c
+	newLabel.append(string2)
+	return newLabel
 
-def xmlAutomataImport (filename):
+def xmlAutomataImport (filename, **kwargs):
+	label = kwargs.get('label')
+
 	TREE = ET.parse(filename)
 	if (TREE is None):
 		return None
 
-	#Obtaining XML root = 'data'
+	#Obtaining XML root (<model>)
 	root = TREE.getroot()
 	if (root is None):
-		return None
+		return None	
 
 	#Creating an empty automata_information list
 	automata_information = [] 
 	temporaryList = []
 
-	#Adding automata_information name
+	#Adding automata_information name (<model id=*>)
 	automata_information.append(root.get('id'))
 
 	
@@ -59,8 +77,13 @@ def xmlAutomataImport (filename):
 			#Creating a new sublist in states list
 			automata_information[1].append([])
 			#Adding automata_information state name
-			stateName = str2list(state.find('name').text)
-			automata_information[1][stateNumber].append([stateName])
+			if label == 'list':
+				stateName = str2listB(state.find('name').text)
+				automata_information[1][stateNumber].append(stateName)
+				#print(stateName)
+			else:
+				stateName = str2list(state.find('name').text)
+				automata_information[1][stateNumber].append([stateName])
 			temporaryList[0].append([int(state.get('id')),stateName])
 			#Adding information about state (Initial/Marked)
 			for properties in state.findall('properties'):
@@ -99,7 +122,9 @@ def xmlAutomataImport (filename):
 					automata_information[2][eventNumber].append(False)
 
 			eventNumber += 1
-
+		# print(automata_information[1])
+		# print(automata_information[2])
+		# print(temporaryList)
 		# #Adding automata_information transitions
 		# automata_information.append([])
 		# transitionNumber = 0
@@ -126,11 +151,14 @@ def xmlAutomataImport (filename):
 	 # 				automata_information[3][transitionNumber].append([stateInfo[1]])	 	
 	 # 				break
 
-		#  	transitionNumber += 1
+		#New Adding automata_information transitions		
+		#automata_information.append([])
+		group = []
+		# for x in range(automata_information[1].index(automata_information[1][-1])+1):
+		# 	group.append([])
+		for x in range(len(automata_information[1])):
+			group.append([])	
 
-		#New Adding automata_information transitions
-		automata_information.append([])
-		#transitionNumber = 0
 		last_sourceID = -1		
 		for transition in data.findall('transition'):
 			listIndex = -1
@@ -141,35 +169,58 @@ def xmlAutomataImport (filename):
 			if sourceID != last_sourceID:		 			 		
 				last_sourceID = sourceID
 				counterIndex = 0
-				for stateInfo in temporaryList[0]:
+				for stateInfo in temporaryList[0]: # temporaryList[0] = [[state_ID, label_ID]...
 					if stateInfo[0] == sourceID:
 						sourceLabel = stateInfo[1]
+						stateIndex = temporaryList[0].index(stateInfo)
 						# print(sourceLabel)
 						# print('encontrou!') 	
 						break
-				for sublist in automata_information[3]:		 			
-					if sourceLabel == sublist[0][0][0]:
-						listIndex = automata_information[3].index(sublist)
-						break
-					counterIndex += 1
-				if listIndex == -1:		
-					#Creating a new sublist in transitions list
-					automata_information[3].append([])
-					listIndex = counterIndex
+				# #### eliminar
+				# for sublist in automata_information[3]:		 			
+				# 	if sourceLabel == sublist[0][0][0]:
+				# 		listIndex = automata_information[3].index(sublist)
+				# 		break
+				# 	counterIndex += 1
+				# if listIndex == -1:		
+				# 	#Creating a new sublist in transitions list
+				# 	automata_information[3].append([])
+				# 	listIndex = counterIndex
+				# #### fim eliminar
 
 			for stateInfo in temporaryList[0]:
 				if stateInfo[0] == sourceID:
-					automata_information[3][listIndex].append([[stateInfo[1]]])	 	
-					break
+					#automata_information[3][listIndex].append([[stateInfo[1]]])
+					if label == 'list':
+						group[stateIndex].append([stateInfo[1]])
+						break
+					else:
+						group[stateIndex].append([[stateInfo[1]]])
+						break
 
 			for eventInfo in temporaryList[1]:
 				if eventInfo[0] == eventID:
-					automata_information[3][listIndex][-1].append(eventInfo[1])	 	
+					#automata_information[3][listIndex][-1].append(eventInfo[1])
+					group[stateIndex][-1].append(eventInfo[1])	 	
 					break
 
 			for stateInfo in temporaryList[0]:
 				if stateInfo[0] == targetID:
-					automata_information[3][listIndex][-1].append([stateInfo[1]])	 	
-					break
+					#automata_information[3][listIndex][-1].append([stateInfo[1]])
+					if label == 'list':
+						group[stateIndex][-1].append(stateInfo[1])
+						break
+					else:
+						group[stateIndex][-1].append([stateInfo[1]])
+						break
+	automata_information.append(group)
+	# print('')
+	# print('automata_information[3]')
+	# for x in automata_information[3]:
+	# 	print(x)
+	# print('')
+	# print('group')
+	# for x in group:
+	# 	print(x)
 
 	return automata_information 
